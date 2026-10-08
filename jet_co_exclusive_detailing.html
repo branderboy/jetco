@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jet & Co. | Elevated Aviation Detail Cleaning</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Replacing Playfair with a geometric sans for headings, keeping Plus Jakarta for body but adjusting weights -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Using Montserrat for bold, geometric headings similar to the logo, and Inter for clean body text -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- GSAP for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            // Extracted exact colors from the logo image
+                            navy: '#061327', 
+                            cream: '#F7F3EB', 
+                            lightBlue: '#E8F1F8',
+                            accent: '#0A2540',
+                            gold: '#D4AF37'
+                        }
+                    },
+                    fontFamily: {
+                        // Applying new fonts
+                        sans: ['"Inter"', 'sans-serif'],
+                        heading: ['"Montserrat"', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glow': '0 0 20px rgba(10, 37, 64, 0.1)',
+                        'float': '0 10px 30px -10px rgba(0, 0, 0, 0.1)',
+                        'gold-glow': '0 0 15px rgba(212, 175, 55, 0.3)'
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'hero-pattern': 'linear-gradient(to right bottom, rgba(255, 255, 255, 0.9), rgba(232, 241, 248, 0.9)), url("https://images.unsplash.com/photo-1540962351504-03099e0a754b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80")',
+                        'service-pattern': 'linear-gradient(to right, rgba(253, 251, 247, 0.95), rgba(253, 251, 247, 0.95)), url("https://images.unsplash.com/photo-1596700753046-512c1c65d6c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80")'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom Styles for non-flat elements */
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-hover-effect {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-hover-effect::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%) scale(0);
+            border-radius: 50%;
+            transition: transform 0.5s ease;
+            z-index: 0;
+        }
+        
+        .btn-hover-effect:hover::after {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        .btn-hover-effect span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .clip-path-slant {
+            clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+        }
+        
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(90deg, #051329, #0A2540);
+        }
+
+        .card-3d {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+        
+        .card-3d:hover {
+            transform: translateY(-10px) rotateX(2deg) rotateY(-2deg);
+            box-shadow: 20px 20px 40px rgba(0,0,0,0.1), -10px -10px 30px rgba(255,255,255,0.8);
+        }
+
+        /* Subtle animated background */
+        .bg-animate {
+            background: linear-gradient(-45deg, #ffffff, #E8F1F8, #f0f4f8, #ffffff);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Custom line separator */
+        .elegant-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(5, 19, 41, 0.2), transparent);
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 bg-white overflow-x-hidden selection:bg-brand-navy selection:text-white">
+
+    <!-- Top Bar Navigation (Dark Background based on logo) -->
+    <nav class="fixed w-full z-50 transition-all duration-300" id="navbar">
+        <div class="bg-brand-navy border-b border-white/10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-24">
+                    <!-- Logo Area -->
+                    <div class="flex-shrink-0 flex items-center cursor-pointer">
+                        <!-- Referencing the provided logo image -->
+                        <img class="h-16 w-auto object-contain" src="1FC97397-B775-4B62-B32F-B2AF2EA891E7_2.jpg" alt="Jet & Co. Elevated Aviation Detail Cleaning">
+                    </div>
+                    
+                    <!-- Desktop Menu -->
+                    <div class="hidden md:flex space-x-8 items-center">
+                        <a href="#services" class="text-brand-cream/80 hover:text-white transition-colors text-sm font-semibold tracking-wide uppercase">Services</a>
+                        <a href="#standards" class="text-brand-cream/80 hover:text-white transition-colors text-sm font-semibold tracking-wide uppercase">Our Standards</a>
+                        <a href="#testimonials" class="text-brand-cream/80 hover:text-white transition-colors text-sm font-semibold tracking-wide uppercase">Clientele</a>
+                        
+                        <!-- CTA Button (Funnel Element) -->
+                        <a href="#quote" class="btn-hover-effect bg-brand-cream text-brand-navy px-6 py-3 rounded-none font-bold tracking-widest text-sm shadow-[0_0_15px_rgba(253,251,247,0.3)] hover:shadow-[0_0_25px_rgba(253,251,247,0.5)] uppercase flex items-center gap-2">
+                            <span>Request Quote</span>
+                            <i class="fa-solid fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
+
+                    <!-- Mobile Menu Button -->
+                    <div class="md:hidden flex items-center">
+                        <button id="mobile-menu-btn" class="text-brand-cream hover:text-white focus:outline-none p-2">
+                            <i class="fa-solid fa-bars text-2xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-navy/95 backdrop-blur-md absolute w-full h-screen border-t border-white/10">
+            <div class="px-4 pt-8 pb-3 space-y-6 flex flex-col items-center">
+                <a href="#services" class="text-brand-cream text-xl font-medium tracking-wide">Services</a>
+                <a href="#standards" class="text-brand-cream text-xl font-medium tracking-wide">Our Standards</a>
+                <a href="#testimonials" class="text-brand-cream text-xl font-medium tracking-wide">Clientele</a>
+                <a href="#quote" class="bg-brand-cream text-brand-navy w-full text-center py-4 font-bold tracking-widest uppercase mt-4">Request Quote</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section (Light Background, High Contrast, Funnel Oriented) -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-hero-pattern bg-cover bg-center">
+        <!-- Overlay gradient for better text readability while keeping it light -->
+        <div class="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent z-0"></div>
+        
+        <!-- Decorative elements to make it non-flat -->
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand-lightBlue rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob"></div>
+        <div class="absolute top-40 -left-20 w-72 h-72 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-2000"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Hero Copy (Funnel Focus: Hook & Desire) -->
+                <div class="hero-content" style="opacity: 0; transform: translateY(30px);">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-lightBlue border border-blue-100 mb-6 shadow-sm">
+                        <span class="w-2 h-2 rounded-full bg-brand-navy animate-pulse"></span>
+                        <span class="text-xs font-bold tracking-widest text-brand-navy uppercase font-heading">Exclusive Aviation Care</span>
+                    </div>
+                    
+                    <h1 class="text-5xl lg:text-7xl font-heading font-black tracking-tight leading-[1.05] mb-6 text-brand-navy">
+                        Premium Aircraft Detailing & <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-navy to-blue-800">Private Jet Cleaning.</span>
+                    </h1>
+                    
+                    <p class="text-lg lg:text-xl text-gray-600 mb-8 font-light leading-relaxed max-w-lg">
+                        Jet & Co. provides uncompromising, white-glove detailing services for discerning aircraft owners. Elevate your asset's condition with meticulous precision.
+                    </p>
+                    
+                    <!-- Primary CTA -->
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#quote" class="btn-hover-effect bg-brand-navy text-white px-8 py-4 text-center font-bold tracking-widest uppercase shadow-float hover:shadow-xl hover:-translate-y-1 transition-all flex justify-center items-center gap-3 group">
+                            <span>Secure Your Booking</span>
+                            <i class="fa-solid fa-plane-up transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"></i>
+                        </a>
+                        <a href="#services" class="px-8 py-4 text-center font-semibold text-brand-navy border border-brand-navy/20 hover:bg-brand-navy/5 transition-colors flex justify-center items-center gap-2">
+                            <span>Explore Services</span>
+                        </a>
+                    </div>
+                    
+                    <!-- Trust Indicators -->
+                    <div class="mt-12 flex items-center gap-6 pt-6 border-t border-gray-200">
+                        <div class="flex -space-x-3">
+                            <img class="w-10 h-10 rounded-full border-2 border-white shadow-sm" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Client">
+                            <img class="w-10 h-10 rounded-full border-2 border-white shadow-sm" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Client">
+                            <img class="w-10 h-10 rounded-full border-2 border-white shadow-sm" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80" alt="Client">
+                        </div>
+                        <div class="text-sm">
+                            <div class="flex text-yellow-400 text-xs">
+                                <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                            </div>
+                            <span class="font-semibold text-brand-navy">5.0</span> <span class="text-gray-500">from Elite Fleet Owners</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Visual (Dynamic, Non-Flat) -->
+                <div class="relative lg:h-[600px] flex items-center justify-center hero-image-container" style="opacity: 0;">
+                    <!-- Decorative back plate -->
+                    <div class="absolute inset-0 bg-brand-lightBlue rounded-3xl transform rotate-3 scale-105 shadow-inner"></div>
+                    
+                    <!-- Main image with shadow and border -->
+                    <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl border-4 border-white transform -rotate-2 hover:rotate-0 transition-transform duration-500 w-full h-full max-h-[500px]">
+                        <img src="https://images.unsplash.com/photo-1540962351504-03099e0a754b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Luxury Jet Interior" class="w-full h-full object-cover object-center">
+                        
+                        <!-- Floating detail badge -->
+                        <div class="absolute bottom-6 -left-6 glassmorphism px-6 py-4 rounded-xl shadow-lg flex items-center gap-4 transform translate-x-10 animate-bounce" style="animation-duration: 3s;">
+                            <div class="w-12 h-12 rounded-full bg-brand-navy flex items-center justify-center text-white">
+                                <i class="fa-solid fa-sparkles"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Standard</p>
+                                <p class="text-brand-navy font-bold">Flawless Finish</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DMV Coverage Area (Distinct Defined Section) -->
+    <section class="py-24 bg-gray-50 border-t border-gray-200 relative overflow-hidden">
+        <!-- Subtle background pattern -->
+        <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(#0A2540 1px, transparent 1px); background-size: 32px 32px;"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 gs-reveal">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs font-bold tracking-widest text-brand-navy/60 uppercase mb-4 block font-heading">Authorized Service Network</span>
+                <h3 class="text-3xl md:text-4xl font-heading text-brand-navy font-black mb-4 uppercase tracking-wide">Exclusive DMV FBO & Airport Coverage</h3>
+                <div class="elegant-line w-24 mx-auto mb-6"></div>
+                <p class="text-base text-gray-500 font-medium">Cleared for dispatch across private and public facilities in Washington D.C., Maryland & Virginia.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- HEF - Manassas -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 group flex flex-col h-full cursor-default">
+                    <div class="flex justify-between items-start mb-6">
+                        <h4 class="font-heading font-black text-4xl text-brand-navy tracking-tighter">HEF</h4>
+                        <div class="w-10 h-10 rounded-full bg-brand-lightBlue flex items-center justify-center text-brand-navy group-hover:bg-brand-navy group-hover:text-white transition-all duration-300 shadow-sm border border-blue-50/50">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="mt-auto">
+                        <p class="text-base font-bold text-gray-900 mb-1">Manassas Regional</p>
+                        <p class="text-xs text-gray-500 uppercase tracking-widest font-semibold">Virginia</p>
+                    </div>
+                </div>
+                
+                <!-- IAD - Dulles -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 group flex flex-col h-full cursor-default">
+                    <div class="flex justify-between items-start mb-6">
+                        <h4 class="font-heading font-black text-4xl text-brand-navy tracking-tighter">IAD</h4>
+                        <div class="w-10 h-10 rounded-full bg-brand-lightBlue flex items-center justify-center text-brand-navy group-hover:bg-brand-navy group-hover:text-white transition-all duration-300 shadow-sm border border-blue-50/50">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="mt-auto">
+                        <p class="text-base font-bold text-gray-900 mb-1">Dulles International</p>
+                        <p class="text-xs text-gray-500 uppercase tracking-widest font-semibold">Virginia</p>
+                    </div>
+                </div>
+                
+                <!-- JYO - Leesburg -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 group flex flex-col h-full cursor-default">
+                    <div class="flex justify-between items-start mb-6">
+                        <h4 class="font-heading font-black text-4xl text-brand-navy tracking-tighter">JYO</h4>
+                        <div class="w-10 h-10 rounded-full bg-brand-lightBlue flex items-center justify-center text-brand-navy group-hover:bg-brand-navy group-hover:text-white transition-all duration-300 shadow-sm border border-blue-50/50">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="mt-auto">
+                        <p class="text-base font-bold text-gray-900 mb-1">Leesburg Executive</p>
+                        <p class="text-xs text-gray-500 uppercase tracking-widest font-semibold">Virginia</p>
+                    </div>
+                </div>
+
+                <!-- DCA - Reagan -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 group flex flex-col h-full cursor-default">
+                    <div class="flex justify-between items-start mb-6">
+                        <h4 class="font-heading font-black text-4xl text-brand-navy tracking-tighter">DCA</h4>
+                        <div class="w-10 h-10 rounded-full bg-brand-lightBlue flex items-center justify-center text-brand-navy group-hover:bg-brand-navy group-hover:text-white transition-all duration-300 shadow-sm border border-blue-50/50">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="mt-auto">
+                        <p class="text-base font-bold text-gray-900 mb-1">Reagan National</p>
+                        <p class="text-xs text-gray-500 uppercase tracking-widest font-semibold">Washington, D.C.</p>
+                    </div>
+                </div>
+
+                <!-- BWI - Baltimore -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 group flex flex-col h-full cursor-default">
+                    <div class="flex justify-between items-start mb-6">
+                        <h4 class="font-heading font-black text-4xl text-brand-navy tracking-tighter">BWI</h4>
+                        <div class="w-10 h-10 rounded-full bg-brand-lightBlue flex items-center justify-center text-brand-navy group-hover:bg-brand-navy group-hover:text-white transition-all duration-300 shadow-sm border border-blue-50/50">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="mt-auto">
+                        <p class="text-base font-bold text-gray-900 mb-1">Baltimore/Wash Intl</p>
+                        <p class="text-xs text-gray-500 uppercase tracking-widest font-semibold">Maryland</p>
+                    </div>
+                </div>
+
+                <!-- GAI - Montgomery -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 group flex flex-col h-full cursor-default">
+                    <div class="flex justify-between items-start mb-6">
+                        <h4 class="font-heading font-black text-4xl text-brand-navy tracking-tighter">GAI</h4>
+                        <div class="w-10 h-10 rounded-full bg-brand-lightBlue flex items-center justify-center text-brand-navy group-hover:bg-brand-navy group-hover:text-white transition-all duration-300 shadow-sm border border-blue-50/50">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="mt-auto">
+                        <p class="text-base font-bold text-gray-900 mb-1">Montgomery County</p>
+                        <p class="text-xs text-gray-500 uppercase tracking-widest font-semibold">Maryland</p>
+                    </div>
+                </div>
+
+                <!-- MTN - Martin State -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 group flex flex-col h-full cursor-default">
+                    <div class="flex justify-between items-start mb-6">
+                        <h4 class="font-heading font-black text-4xl text-brand-navy tracking-tighter">MTN</h4>
+                        <div class="w-10 h-10 rounded-full bg-brand-lightBlue flex items-center justify-center text-brand-navy group-hover:bg-brand-navy group-hover:text-white transition-all duration-300 shadow-sm border border-blue-50/50">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="mt-auto">
+                        <p class="text-base font-bold text-gray-900 mb-1">Martin State</p>
+                        <p class="text-xs text-gray-500 uppercase tracking-widest font-semibold">Maryland</p>
+                    </div>
+                </div>
+
+                <!-- RMN - Stafford -->
+                <div class="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] hover:-translate-y-1 transition-all duration-300 group flex flex-col h-full cursor-default">
+                    <div class="flex justify-between items-start mb-6">
+                        <h4 class="font-heading font-black text-4xl text-brand-navy tracking-tighter">RMN</h4>
+                        <div class="w-10 h-10 rounded-full bg-brand-lightBlue flex items-center justify-center text-brand-navy group-hover:bg-brand-navy group-hover:text-white transition-all duration-300 shadow-sm border border-blue-50/50">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                    </div>
+                    <div class="mt-auto">
+                        <p class="text-base font-bold text-gray-900 mb-1">Stafford Regional</p>
+                        <p class="text-xs text-gray-500 uppercase tracking-widest font-semibold">Virginia</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-16 text-center">
+                <div class="inline-flex items-center justify-center gap-3 px-6 py-3 bg-white rounded-full border border-gray-200 shadow-sm">
+                    <i class="fa-solid fa-shield-halved text-brand-navy text-lg"></i> 
+                    <p class="text-xs text-brand-navy font-bold uppercase tracking-widest">
+                        Fully permitted at all listed FBOs and Signature Flight Support facilities.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section (Refined, Minimalist High-End look) -->
+    <section id="services" class="py-32 bg-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-24 gs-reveal">
+                <span class="text-xs font-bold tracking-widest text-brand-navy/50 uppercase mb-4 block font-heading">Excellence in Execution</span>
+                <h2 class="text-4xl md:text-5xl font-heading text-brand-navy font-black tracking-tight uppercase">Our Detailing Disciplines</h2>
+                <div class="elegant-line w-full max-w-xs mx-auto mt-8"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-16 relative z-10">
+                
+                <!-- Service 1: Minimalist approach -->
+                <div class="group gs-reveal">
+                    <div class="overflow-hidden rounded-xl mb-8 relative aspect-[4/3] shadow-md border border-gray-50">
+                        <img src="https://images.unsplash.com/photo-1540962351504-03099e0a754b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Cabin Restoration" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out filter grayscale hover:grayscale-0">
+                        <div class="absolute inset-0 bg-brand-navy/10 group-hover:bg-transparent transition-colors duration-500"></div>
+                        <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-couch text-brand-navy text-xl"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-brand-navy mb-3 font-heading uppercase tracking-wide border-b border-gray-100 pb-3">Cabin Restoration</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed mb-6 font-light">
+                            Deep extraction, premium leather conditioning, and meticulous sanitation of high-touch surfaces, cabinetry, and lavatories.
+                        </p>
+                        <ul class="space-y-2">
+                            <li class="flex items-center gap-3 text-xs text-brand-navy/80 uppercase tracking-wide">
+                                <div class="w-1 h-1 bg-brand-gold rounded-full"></div> Supple Leather Treatment
+                            </li>
+                            <li class="flex items-center gap-3 text-xs text-brand-navy/80 uppercase tracking-wide">
+                                <div class="w-1 h-1 bg-brand-gold rounded-full"></div> Woodwork Polishing
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Service 2 (The Signature) -->
+                <div class="group gs-reveal transform md:-translate-y-8">
+                    <div class="overflow-hidden rounded-xl mb-8 relative aspect-[4/3] shadow-xl border-2 border-brand-navy">
+                        <img src="https://images.unsplash.com/photo-1596700753046-512c1c65d6c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Signature Detail" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out">
+                        <div class="absolute top-0 left-0 bg-brand-navy text-white text-[10px] font-bold px-4 py-2 uppercase tracking-widest z-20">
+                            Signature Service
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/80 via-transparent to-transparent z-10"></div>
+                        <div class="absolute bottom-4 left-4 z-20 flex items-center gap-3">
+                             <div class="bg-white/20 backdrop-blur-md p-3 rounded-lg">
+                                <i class="fa-solid fa-plane text-white text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-black text-brand-navy mb-3 font-heading uppercase tracking-wide border-b-2 border-brand-navy pb-3">The Jet & Co. Standard</h3>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                            Our comprehensive exterior and interior package. Complete dry wash, leading edge polishing, brightwork, and full cabin restoration.
+                        </p>
+                        <ul class="space-y-2">
+                            <li class="flex items-center gap-3 text-xs text-brand-navy font-semibold uppercase tracking-wide">
+                                <div class="w-1 h-1 bg-brand-navy rounded-full"></div> Complete Dry Wash
+                            </li>
+                            <li class="flex items-center gap-3 text-xs text-brand-navy font-semibold uppercase tracking-wide">
+                                <div class="w-1 h-1 bg-brand-navy rounded-full"></div> Brightwork Polishing
+                            </li>
+                            <li class="flex items-center gap-3 text-xs text-brand-navy font-semibold uppercase tracking-wide">
+                                <div class="w-1 h-1 bg-brand-navy rounded-full"></div> Full Interior Suite
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="group gs-reveal">
+                    <div class="overflow-hidden rounded-xl mb-8 relative aspect-[4/3] shadow-md border border-gray-50">
+                        <img src="https://images.unsplash.com/photo-1542282088-fe8426682b8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Aero-Protection" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out filter grayscale hover:grayscale-0">
+                        <div class="absolute inset-0 bg-brand-navy/10 group-hover:bg-transparent transition-colors duration-500"></div>
+                        <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-sm">
+                            <i class="fa-solid fa-shield-halved text-brand-navy text-xl"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-brand-navy mb-3 font-heading uppercase tracking-wide border-b border-gray-100 pb-3">Aero-Protection</h3>
+                        <p class="text-gray-500 text-sm leading-relaxed mb-6 font-light">
+                            Advanced ceramic coatings and aviation-grade paint sealants designed to reduce drag and protect against harsh atmospheric elements.
+                        </p>
+                        <ul class="space-y-2">
+                            <li class="flex items-center gap-3 text-xs text-brand-navy/80 uppercase tracking-wide">
+                                <div class="w-1 h-1 bg-brand-gold rounded-full"></div> Aviation Ceramic Coating
+                            </li>
+                            <li class="flex items-center gap-3 text-xs text-brand-navy/80 uppercase tracking-wide">
+                                <div class="w-1 h-1 bg-brand-gold rounded-full"></div> Paint Correction
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-20 gs-reveal">
+                <a href="#quote" class="inline-flex items-center gap-4 text-brand-navy font-bold tracking-widest text-sm uppercase group">
+                    <span class="border-b border-brand-navy pb-1 group-hover:border-blue-600 transition-colors">View Complete Specifications</span> 
+                    <i class="fa-solid fa-arrow-right transform group-hover:translate-x-2 transition-transform"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Authority/Standards Section (Split Layout, Non-Flat imagery) -->
+    <section id="standards" class="py-24 bg-animate overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                
+                <!-- Imagery -->
+                <div class="w-full lg:w-1/2 relative gs-reveal-left">
+                    <div class="relative rounded-2xl overflow-hidden shadow-[0_20px_50px_rgba(5,19,41,0.15)] z-10 aspect-[4/5] md:aspect-[3/2] lg:aspect-[4/5]">
+                        <img src="https://images.unsplash.com/photo-1542282088-fe8426682b8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Detailing Process" class="w-full h-full object-cover">
+                        <!-- Gradient Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-navy/60 to-transparent"></div>
+                        
+                        <!-- Floating Stat -->
+                        <div class="absolute bottom-8 left-8 glassmorphism p-4 rounded-xl border border-white/40">
+                            <p class="text-3xl font-serif font-bold text-white mb-1">100%</p>
+                            <p class="text-xs font-semibold uppercase tracking-wider text-brand-cream/80">Aviation Grade<br>Products Only</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Decorative back block -->
+                    <div class="absolute -top-6 -right-6 w-full h-full border-2 border-brand-navy/10 rounded-2xl z-0"></div>
+                </div>
+                
+                <!-- Content -->
+                <div class="w-full lg:w-1/2 gs-reveal-right">
+                    <span class="text-sm font-bold tracking-widest text-brand-navy/60 uppercase mb-2 block font-heading">Our Standards</span>
+                    <h2 class="text-4xl md:text-5xl font-heading font-black text-brand-navy mb-6 leading-tight uppercase tracking-tight">Detailing is a Science. <br>We Perfected It.</h2>
+                    
+                    <p class="text-gray-600 mb-8 leading-relaxed">
+                        We don't use automotive products on multi-million dollar aviation assets. Our specialized team is trained in the precise protocols required for aircraft interior materials and exterior aerodynamic surfaces.
+                    </p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex gap-4 p-4 rounded-xl hover:bg-white transition-colors border border-transparent hover:border-gray-100 hover:shadow-sm">
+                            <div class="w-12 h-12 bg-brand-lightBlue rounded-full flex items-center justify-center text-brand-navy shrink-0">
+                                <i class="fa-solid fa-droplet"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-brand-navy mb-1 font-heading uppercase tracking-wide">Boeing & Airbus Approved Chemicals</h4>
+                                <p class="text-sm text-gray-500">Every solution we use meets strict FAA and manufacturer guidelines to prevent corrosion and material degradation.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4 p-4 rounded-xl hover:bg-white transition-colors border border-transparent hover:border-gray-100 hover:shadow-sm">
+                            <div class="w-12 h-12 bg-brand-lightBlue rounded-full flex items-center justify-center text-brand-navy shrink-0">
+                                <i class="fa-solid fa-user-tie"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-brand-navy mb-1 font-heading uppercase tracking-wide">Vetted, Professional Technicians</h4>
+                                <p class="text-sm text-gray-500">Security-cleared, highly trained professionals who understand ramp etiquette and aircraft safety protocols.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 p-4 rounded-xl hover:bg-white transition-colors border border-transparent hover:border-gray-100 hover:shadow-sm">
+                            <div class="w-12 h-12 bg-brand-lightBlue rounded-full flex items-center justify-center text-brand-navy shrink-0">
+                                <i class="fa-solid fa-clock"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-brand-navy mb-1 font-heading uppercase tracking-wide">AOG & Turnaround Responsiveness</h4>
+                                <p class="text-sm text-gray-500">We work seamlessly around your flight schedule, providing rapid turnaround cleaning without compromising quality.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action / Lead Capture (Free Flowing on White) -->
+    <section id="quote" class="py-32 relative bg-white border-t border-gray-100">
+        
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 gs-reveal">
+            
+            <div class="text-center mb-16">
+                <span class="text-xs font-bold tracking-widest text-brand-navy/50 uppercase mb-4 block font-heading">Initiate Service</span>
+                <h2 class="text-4xl md:text-6xl font-heading text-brand-navy font-black mb-4 uppercase tracking-tight">Request a Detail</h2>
+                <div class="elegant-line w-full max-w-xs mx-auto mb-6"></div>
+                <p class="text-gray-500 max-w-2xl mx-auto font-light leading-relaxed">Submit the details of your aircraft. A dedicated Jet & Co. liaison will contact you within hours to design a tailored service proposal that meets your exact specifications.</p>
+            </div>
+            
+            <div class="flex flex-col lg:flex-row gap-16 items-start">
+                
+                <!-- Form Side (Free Flowing) -->
+                <div class="w-full lg:w-3/5">
+                    <form action="#" method="POST" class="space-y-8" onsubmit="event.preventDefault(); showSuccessMessage();">
+                        
+                        <!-- Contact Info Group -->
+                        <div class="space-y-6">
+                            <h3 class="text-sm font-bold text-brand-navy uppercase tracking-widest border-b border-gray-100 pb-2">Client Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="relative">
+                                    <label for="first-name" class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider absolute -top-2 left-3 bg-white px-1">First Name</label>
+                                    <input type="text" id="first-name" class="w-full bg-transparent border border-gray-200 rounded-md px-4 py-4 focus:outline-none focus:border-brand-navy focus:ring-1 focus:ring-brand-navy transition-all text-gray-800 placeholder-transparent" placeholder="John" required>
+                                </div>
+                                <div class="relative">
+                                    <label for="last-name" class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider absolute -top-2 left-3 bg-white px-1">Last Name</label>
+                                    <input type="text" id="last-name" class="w-full bg-transparent border border-gray-200 rounded-md px-4 py-4 focus:outline-none focus:border-brand-navy focus:ring-1 focus:ring-brand-navy transition-all text-gray-800 placeholder-transparent" placeholder="Doe" required>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="relative">
+                                    <label for="email" class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider absolute -top-2 left-3 bg-white px-1">Email Address</label>
+                                    <input type="email" id="email" class="w-full bg-transparent border border-gray-200 rounded-md px-4 py-4 focus:outline-none focus:border-brand-navy focus:ring-1 focus:ring-brand-navy transition-all text-gray-800 placeholder-transparent" placeholder="email@domain.com" required>
+                                </div>
+                                <div class="relative">
+                                    <label for="phone" class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider absolute -top-2 left-3 bg-white px-1">Phone Number</label>
+                                    <input type="tel" id="phone" class="w-full bg-transparent border border-gray-200 rounded-md px-4 py-4 focus:outline-none focus:border-brand-navy focus:ring-1 focus:ring-brand-navy transition-all text-gray-800 placeholder-transparent" placeholder="(555) 123-4567" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Aircraft Info Group -->
+                        <div class="space-y-6 pt-4">
+                            <h3 class="text-sm font-bold text-brand-navy uppercase tracking-widest border-b border-gray-100 pb-2">Aircraft Details</h3>
+                            <div class="relative">
+                                <label for="aircraft-type" class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider absolute -top-2 left-3 bg-white px-1">Aircraft Make/Model</label>
+                                <input type="text" id="aircraft-type" class="w-full bg-transparent border border-gray-200 rounded-md px-4 py-4 focus:outline-none focus:border-brand-navy focus:ring-1 focus:ring-brand-navy transition-all text-gray-800 placeholder-transparent" placeholder="e.g., Gulfstream G650" required>
+                            </div>
+                            
+                            <div class="relative">
+                                <label for="base" class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider absolute -top-2 left-3 bg-white px-1">Base Location / FBO</label>
+                                <input type="text" id="base" class="w-full bg-transparent border border-gray-200 rounded-md px-4 py-4 focus:outline-none focus:border-brand-navy focus:ring-1 focus:ring-brand-navy transition-all text-gray-800 placeholder-transparent" placeholder="e.g., Teterboro (TEB)">
+                            </div>
+                        </div>
+
+                        <div class="pt-6 border-t border-gray-50 flex flex-col sm:flex-row items-center justify-between gap-6">
+                            <p class="text-xs text-gray-400 font-light flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-gray-300"></i> Secure & Confidential
+                            </p>
+                            <button type="submit" class="w-full sm:w-auto btn-hover-effect bg-brand-navy text-white px-10 py-4 rounded-md font-bold tracking-widest uppercase shadow-[0_10px_30px_-10px_rgba(5,19,41,0.5)] hover:shadow-[0_15px_40px_-10px_rgba(5,19,41,0.7)] transition-all transform hover:-translate-y-1 flex justify-center items-center gap-3 group">
+                                <span>Submit Request</span>
+                                <i class="fa-solid fa-arrow-right text-xs group-hover:translate-x-1 transition-transform"></i>
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <!-- Success Message (Hidden by default) -->
+                    <div id="success-message" class="hidden mt-8 p-6 bg-gray-50 border border-gray-100 rounded-lg text-center">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-gray-100">
+                            <i class="fa-solid fa-check text-brand-navy text-2xl"></i>
+                        </div>
+                        <h4 class="font-serif text-xl text-brand-navy mb-2">Request Received</h4>
+                        <p class="text-sm text-gray-500 font-light">Our team will contact you shortly to finalize your service details.</p>
+                    </div>
+                </div>
+                
+                <!-- Visual/Info Side (Floating Image rather than a joined card) -->
+                <div class="w-full lg:w-2/5 hidden lg:block relative">
+                    <div class="sticky top-32">
+                        <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-[3/4]">
+                            <img src="https://images.unsplash.com/photo-1540962351504-03099e0a754b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Detailing Excellence" class="w-full h-full object-cover">
+                            
+                            <!-- Elegant overlay gradient -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-brand-navy via-brand-navy/40 to-transparent"></div>
+                            
+                            <!-- Content over image -->
+                            <div class="absolute bottom-0 left-0 w-full p-10 text-white">
+                                <img src="1FC97397-B775-4B62-B32F-B2AF2EA891E7_2.jpg" alt="Jet & Co." class="h-8 w-auto object-contain brightness-0 invert opacity-90 mb-6">
+                                <h3 class="font-heading text-3xl font-black mb-4 uppercase tracking-wide">Uncompromising<br>Standards.</h3>
+                                
+                                <div class="elegant-line w-12 mb-6 bg-white/30"></div>
+                                
+                                <ul class="space-y-4">
+                                    <li class="flex items-center gap-4 text-sm font-light text-white/90">
+                                        <div class="w-1 h-1 bg-white rounded-full"></div> Fully Insured & Certified
+                                    </li>
+                                    <li class="flex items-center gap-4 text-sm font-light text-white/90">
+                                        <div class="w-1 h-1 bg-white rounded-full"></div> FAA Compliant Solutions
+                                    </li>
+                                    <li class="flex items-center gap-4 text-sm font-light text-white/90">
+                                        <div class="w-1 h-1 bg-white rounded-full"></div> Nationwide FBO Coverage
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <!-- Floating decorative element -->
+                        <div class="absolute -z-10 top-10 -right-10 w-full h-full border border-gray-200 rounded-2xl"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-navy text-brand-cream border-t border-white/10 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+                <div class="col-span-1 md:col-span-2">
+                    <img src="1FC97397-B775-4B62-B32F-B2AF2EA891E7_2.jpg" alt="Jet & Co." class="h-12 w-auto object-contain mb-6">
+                    <p class="text-brand-cream/60 text-sm leading-relaxed max-w-sm">
+                        Elevated aviation detail cleaning. We provide meticulous care for private and corporate aircraft, preserving value and ensuring pristine aesthetics.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold uppercase tracking-widest text-sm mb-6 text-white">Contact</h4>
+                    <ul class="space-y-3 text-brand-cream/60 text-sm">
+                        <li><i class="fa-solid fa-phone w-5 text-brand-lightBlue"></i> 1-800-JET-DETAIL</li>
+                        <li><i class="fa-solid fa-envelope w-5 text-brand-lightBlue"></i> service@jetandco.com</li>
+                        <li><i class="fa-solid fa-location-dot w-5 text-brand-lightBlue"></i> Available at Major FBOs Nationwide</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold uppercase tracking-widest text-sm mb-6 text-white">Legal</h4>
+                    <ul class="space-y-3 text-brand-cream/60 text-sm">
+                        <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Insurance Details</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-brand-cream/40 text-xs mb-4 md:mb-0">
+                    &copy; 2026 Jet & Co. All rights reserved.
+                </p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-brand-cream/40 hover:text-white transition-colors"><i class="fa-brands fa-linkedin text-xl"></i></a>
+                    <a href="#" class="text-brand-cream/40 hover:text-white transition-colors"><i class="fa-brands fa-instagram text-xl"></i></a>
+                    <a href="#" class="text-brand-cream/40 hover:text-white transition-colors"><i class="fa-brands fa-twitter text-xl"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts for Interactivity and Animations -->
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navbar = document.getElementById('navbar');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = mobileMenuBtn.querySelector('i');
+            if(mobileMenu.classList.contains('hidden')){
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            }
+        });
+
+        // Close mobile menu on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileMenuBtn.querySelector('i').classList.remove('fa-xmark');
+                mobileMenuBtn.querySelector('i').classList.add('fa-bars');
+            });
+        });
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-lg');
+                navbar.querySelector('.bg-brand-navy').classList.add('bg-opacity-95', 'backdrop-blur-sm');
+            } else {
+                navbar.classList.remove('shadow-lg');
+                navbar.querySelector('.bg-brand-navy').classList.remove('bg-opacity-95', 'backdrop-blur-sm');
+            }
+        });
+
+        // Form Submission Simulation
+        function showSuccessMessage() {
+            const form = document.querySelector('form');
+            const successMsg = document.getElementById('success-message');
+            
+            // Hide form elements smoothly
+            gsap.to(form, {opacity: 0, height: 0, duration: 0.5, onComplete: () => {
+                form.style.display = 'none';
+                successMsg.classList.remove('hidden');
+                gsap.fromTo(successMsg, {opacity: 0, y: 20}, {opacity: 1, y: 0, duration: 0.5});
+            }});
+            
+            // Reset after 5 seconds (for demo purposes)
+            setTimeout(() => {
+                gsap.to(successMsg, {opacity: 0, duration: 0.5, onComplete: () => {
+                    successMsg.classList.add('hidden');
+                    form.style.display = 'block';
+                    form.reset();
+                    gsap.to(form, {opacity: 1, height: 'auto', duration: 0.5});
+                }});
+            }, 5000);
+        }
+
+        // GSAP Animations
+        document.addEventListener("DOMContentLoaded", (event) => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Hero Animations
+            const tl = gsap.timeline();
+            tl.to(".hero-content", {y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 0.2})
+              .to(".hero-image-container", {opacity: 1, duration: 1, ease: "power2.out"}, "-=0.5");
+
+            // General Reveal Animation (Fade up)
+            gsap.utils.toArray('.gs-reveal').forEach(function(elem) {
+                gsap.fromTo(elem, 
+                    { y: 50, opacity: 0 }, 
+                    {
+                        y: 0, 
+                        opacity: 1, 
+                        duration: 1, 
+                        ease: "power3.out",
+                        scrollTrigger: {
+                            trigger: elem,
+                            start: "top 85%", // Trigger when top of element hits 85% of viewport
+                            toggleActions: "play none none reverse"
+                        }
+                    }
+                );
+            });
+
+            // Slide in from left
+            gsap.utils.toArray('.gs-reveal-left').forEach(function(elem) {
+                gsap.fromTo(elem, 
+                    { x: -50, opacity: 0 }, 
+                    {
+                        x: 0, 
+                        opacity: 1, 
+                        duration: 1, 
+                        ease: "power3.out",
+                        scrollTrigger: {
+                            trigger: elem,
+                            start: "top 80%"
+                        }
+                    }
+                );
+            });
+
+            // Slide in from right
+            gsap.utils.toArray('.gs-reveal-right').forEach(function(elem) {
+                gsap.fromTo(elem, 
+                    { x: 50, opacity: 0 }, 
+                    {
+                        x: 0, 
+                        opacity: 1, 
+                        duration: 1, 
+                        ease: "power3.out",
+                        scrollTrigger: {
+                            trigger: elem,
+                            start: "top 80%"
+                        }
+                    }
+                );
+            });
+        });
+    </script>
+</body>
+</html>
