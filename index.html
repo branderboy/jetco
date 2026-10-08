@@ -47,7 +47,7 @@
                     },
                     backgroundImage: {
                         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-                        'hero-pattern': 'linear-gradient(to right bottom, rgba(255, 255, 255, 0.9), rgba(232, 241, 248, 0.9)), url("hero-crew.jpg")',
+                        'hero-pattern': 'url("hero-bg.jpg")',
                         'service-pattern': 'linear-gradient(to right, rgba(253, 251, 247, 0.95), rgba(253, 251, 247, 0.95)), url("https://images.unsplash.com/photo-1596700753046-512c1c65d6c8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80")'
                     }
                 }
@@ -184,7 +184,7 @@
     <!-- Hero Section (Light Background, High Contrast, Funnel Oriented) -->
     <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-hero-pattern bg-cover bg-center">
         <!-- Overlay gradient for better text readability while keeping it light -->
-        <div class="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent z-0"></div>
+        <div class="absolute inset-0 bg-white/80 lg:bg-transparent lg:bg-gradient-to-r lg:from-white/90 lg:via-white/40 lg:to-transparent z-0"></div>
         
         <!-- Decorative elements to make it non-flat -->
         <div class="absolute -top-40 -right-40 w-96 h-96 bg-brand-lightBlue rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob"></div>
@@ -231,28 +231,6 @@
                                 <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
                             </div>
                             <span class="font-semibold text-brand-navy">5.0</span> <span class="text-gray-500">from Elite Fleet Owners</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Hero Visual (Dynamic, Non-Flat) -->
-                <div class="relative lg:h-[600px] flex items-center justify-center hero-image-container" style="opacity: 0;">
-                    <!-- Decorative back plate -->
-                    <div class="absolute inset-0 bg-brand-lightBlue rounded-3xl transform rotate-3 scale-105 shadow-inner"></div>
-                    
-                    <!-- Main image with shadow and border -->
-                    <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl border-4 border-white transform -rotate-2 hover:rotate-0 transition-transform duration-500 w-full h-full max-h-[500px]">
-                        <img src="hero-crew.jpg" alt="Jet &amp; Co. crew detailing a private jet cabin" class="w-full h-full object-cover object-center">
-                        
-                        <!-- Floating detail badge -->
-                        <div class="absolute bottom-6 -left-6 glassmorphism px-6 py-4 rounded-xl shadow-lg flex items-center gap-4 transform translate-x-10 animate-bounce" style="animation-duration: 3s;">
-                            <div class="w-12 h-12 rounded-full bg-brand-navy flex items-center justify-center text-white">
-                                <i class="fa-solid fa-sparkles"></i>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500 uppercase font-bold tracking-wider">Standard</p>
-                                <p class="text-brand-navy font-bold">Flawless Finish</p>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -799,8 +777,7 @@
 
             // Hero Animations
             const tl = gsap.timeline();
-            tl.to(".hero-content", {y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 0.2})
-              .to(".hero-image-container", {opacity: 1, duration: 1, ease: "power2.out"}, "-=0.5");
+            tl.to(".hero-content", {y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 0.2});
 
             // General Reveal Animation (Fade up)
             gsap.utils.toArray('.gs-reveal').forEach(function(elem) {
