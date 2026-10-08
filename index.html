@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="scroll-smooth overflow-x-hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -134,7 +134,7 @@
         }
     </style>
 </head>
-<body class="font-sans text-gray-800 bg-white overflow-x-hidden selection:bg-brand-navy selection:text-white">
+<body class="font-sans text-gray-800 bg-white overflow-x-hidden [overflow-x:clip] selection:bg-brand-navy selection:text-white">
 
     <!-- Top Bar Navigation (Dark Background based on logo) -->
     <nav class="fixed w-full z-50 transition-all duration-300" id="navbar">
@@ -190,7 +190,7 @@
     <!-- Hero Section (Light Background, High Contrast, Funnel Oriented) -->
     <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-hero-pattern bg-cover bg-center">
         <!-- Overlay gradient for better text readability while keeping it light -->
-        <div class="absolute inset-0 bg-white/70 lg:bg-transparent lg:bg-gradient-to-r lg:from-white/95 lg:from-25% lg:via-white/80 lg:via-40% lg:to-transparent lg:to-60% z-0"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-white/90 from-50% via-white/75 via-75% to-white/40 lg:bg-gradient-to-r lg:from-white/95 lg:from-25% lg:via-white/80 lg:via-40% lg:to-transparent lg:to-60% z-0"></div>
 
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -686,12 +686,16 @@
                 );
             });
 
+            // Phones: fade up instead of sliding sideways (prevents horizontal wobble)
+            const isMobile = window.matchMedia('(max-width: 1023px)').matches;
+
             // Slide in from left
             gsap.utils.toArray('.gs-reveal-left').forEach(function(elem) {
                 gsap.fromTo(elem, 
-                    { x: -50, opacity: 0 }, 
+                    { x: isMobile ? 0 : -50, y: isMobile ? 30 : 0, opacity: 0 }, 
                     {
                         x: 0, 
+                        y: 0, 
                         opacity: 1, 
                         duration: 1, 
                         ease: "power3.out",
@@ -706,9 +710,10 @@
             // Slide in from right
             gsap.utils.toArray('.gs-reveal-right').forEach(function(elem) {
                 gsap.fromTo(elem, 
-                    { x: 50, opacity: 0 }, 
+                    { x: isMobile ? 0 : 50, y: isMobile ? 30 : 0, opacity: 0 }, 
                     {
                         x: 0, 
+                        y: 0, 
                         opacity: 1, 
                         duration: 1, 
                         ease: "power3.out",
